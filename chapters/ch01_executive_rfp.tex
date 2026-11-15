@@ -1,0 +1,114 @@
+% ==============================================================================
+% Chapter 1: Executive Summary, Tender Context & Operational Concept (CONOPS)
+% ==============================================================================
+\chapter{תקציר מנהלים, רקע המכרז וחוזה ההקמה הלאומי}
+\label{ch:executive}
+
+\section{פתח דבר: הדמוקרטיה הדליברטיבית בעידן הלוחמה התודעתית}
+מערכות בחירות דמוקרטיות ומוסדות שלטון נציגיים נשענים מאז ומעולם על תשתית אפיסטמית משותפת: יכולתם של אזרחים לקבל מידע אמין, לנהל דיון ציבורי חופשי בספרה הציבורית (\en{Public Sphere}), ולגבש הכרעה מושכלת בקלפי. ואולם, בעשור האחרון חל שינוי מבני עמוק באופי הזירה הציבורית. השילוב בין אלגוריתמים של רשתות חברתיות המתגמלים זעם וקיטוב (\en{Engagement-Driven Amplification}), לבין זמינותם של מודלי שפה גדולים (\en{LLMs}) וכלי סינתזה מולטי-מודאליים (\en{Deepfakes}), העניק לגורמים עוינים — מדינתיים ושאינם מדינתיים — יכולת חסרת תקדים להנדס את השיח הלאומי בזמן אמת \cite{vosoughi2018, walker2018}.
+
+מבצעי השפעה זרים (\en{Foreign Information Manipulation and Interference -- FIMI}) אינם מסתפקים עוד בהפצת ידיעה כוזבת נקודתית. במקום זאת, מערכי השפעה מודרניים מפעילים "נחילי תודעה": אלפי חשבונות מזויפים המופעלים בתיאום סינכרוני, מניעים הסטה מלאכותית של סדר היום (\en{Agenda Hijacking}), מזריקים מסגרות פרשנות מקטבות (\en{Polarizing Frames}), ומפיצים הקלטות קוליות או סרטוני וידאו מזויפים בשעות הקריטיות שטרם סגירת הקלפיות. במצב זה, מנגנוני התגובה המסורתיים של \textbf{בדיקת עובדות בדיעבד (\en{Reactive Fact-Checking})} נכשלים מבחינה מתמטית ותקשורתית: בעוד צוות עיתונאי נדרש שעות לאמת ולהפריך טענה, הנרטיב הכוזב מתפשט במהירות הגדולה פי שישה ממידע מאומת \cite{vosoughi2018}, ומותיר משקע תודעתי מתמשך (\en{Continued Influence Effect}).
+
+\begin{rfpbox}[ייעוד המסמך והצהרת כשירות למכרז הלאומי]
+דוח מכין זה מוגש כמענה רשמי למכרז הבין-משרדי \en{GOV-IL-RFP-2026-CSAI} מטעם \textbf{ועדת הבחירות המרכזית}, \textbf{מערך הסייבר הלאומי} ו\textbf{משרד המשפטים}. מטרת המסמך להוכיח היתכנות אקדמית, הנדסית, כמותית וחוקתית להקמת מערכת \en{CivicShield AI} ("מגן התודעה הלאומי") — תשתית לאומית לחיסון תודעתי פרואקטיבי (\en{Cognitive Prebunking}) המבוססת על ועדת סוכני \en{AI} מתואמת, תחת פיקוח שיפוטי משולש השולל כל אפשרות לצנזורה אוטומטית.
+\end{rfpbox}
+
+\section{ניתוח הפער האסטרטגי: מבדיקת עובדות בדיעבד לחיסון פרואקטיבי}
+הפרדיגמה הרווחת כיום בגופי רגולציה ובמערכות חדשות מבוססת על מעגל תגובה לינארי ואיטי: (א) ידיעה כוזבת עולה לרשת; (ב) היא צוברת חשיפה ויראלית במשך שעות; (ג) הציבור מתבצר בעמדות רגשיות; ו-(ד) רק לאחר שהנזק התרחש מתפרסמת הפרכה פוסט-פקטום. מחקרים עדכניים בפסיכולוגיה פוליטית מלמדים כי הפרכה מאוחרת אף עלולה לחזק את האמונה השקרית בקרב קהלים מקוטבים (\en{Backfire / Familiarity Effect}).
+
+מערכת \en{CivicShield AI} מחליפה פרדיגמה זו בתיאוריית \textbf{החיסון התודעתי (\en{Psychological Inoculation / Prebunking})} \cite{mcguire1961, roozenbeek2022}. כשם שחיסון ביולוגי חושף את מערכת החיסון לגרסה מוחלשת של נגיף כדי לייצר נוגדנים בטרם ההדבקה, כך \en{CivicShield AI} מאתרת דפוסי מניפולציה בעודם באיבם (שלב ה-\en{Weak Signals} בקהילות סגורות וטלגרם), ומסייעת לגורמי ציבור מוסמכים לשדר לאזרחים "נוגדנים קוגניטיביים" — הסבר קצר, ניטרלי ובלתי מפלגתי החושף את \emph{הטכניקה הרטורית} של המניפולציה טרם הגעתה לזרם המרכזי.
+
+{\renewcommand{\arraystretch}{1.35}
+\begin{table}[htbp]
+\centering
+\caption{השוואה אסטרטגית בין הגישה המסורתית לגישת CivicShield AI}
+\label{tab:paradigm_shift}
+\begin{tabularx}{\textwidth}{|p{3.4cm}|X|X|}
+\hline
+\textbf{\textcolor{CivicNavy}{ממד השוואה}} & \textbf{\textcolor{CivicNavy}{גישה מסורתית (בדיקת עובדות בדיעבד)}} & \textbf{\textcolor{CivicNavy}{גישת CivicShield AI (חיסון פרואקטיבי)}} \\ \hline
+תזמון התערבות & לאחר ויראליות שיא (תגובה מאוחרת בשעות או ימים) & בזמן התהוות דפוס ההשפעה (התראה תוך שניות וחיסון מוקדם) \\ \hline
+מוקד הניתוח & אימות עובדתי נקודתי של משפט בודד & זיהוי קמפיין מתואם (\en{CIB}), מסגור מפלג וטופולוגיית בוטים \\ \hline
+מנגנון הגנה קוגניטיבי & תיקון שגיאה לאחר היווצרות הטיה רגשית & הקניית עמידות לטכניקת ההונאה (\en{Prebunking}) \cite{roozenbeek2022} \\ \hline
+מדרגיות הנדסית & תלויה בצוואר בקבוק של עורכים אנושיים & ועדת סוכני \en{AI} היררכית (\en{Multi-Agent Mesh}) + בקרה אנושית \\ \hline
+מגבלה חוקתית & סיכון לשרירותיות רגולטורית בהסרת תוכן & איסור אכיפה ללא חתימה משולשת; הפרדה בין זיהוי לסמכות שיפוט \\ \hline
+\end{tabularx}
+\end{table}}
+
+\section{תפיסת ההפעלה המבצעית (CONOPS)}
+תפיסת ההפעלה הלאומית (\en{Concept of Operations -- CONOPS}) של מערכת \en{CivicShield AI} מתארת מחזור חיים סגור בן ארבעה שלבים רציפים הפועל 24/7 ומתגבר לקצב תגובה תחת \en{250ms} בתקופת 90 הימים שלפני בחירות ארציות:
+\begin{enumerate}
+    \item \textbf{איסוף ונירמול פומבי מאומת (\en{Privacy-Preserving Public Ingestion}):} המערכת צורכת אך ורק מידע פומבי גלוי (\en{OSINT}) מערוצי טלגרם ציבוריים, פוסטים ציבוריים ברשתות חברתיות ופידים חדשותיים. אין כל גישה להודעות פרטיות, שיחות אישיות או מידע מזהה של אזרחים מן השורה, והנתונים עוברים מיסוך אנונימי תחת תקן פרטיות דיפרנציאלית (\en{$\epsilon$-Differential Privacy}).
+    \item \textbf{תזמור ניתוח רב-סוכני (\en{Multi-Agent Diagnostic Reasoning}):} הנתונים מוזרמים למרכז תזמור סוכנים (\en{Agent Mesh Hub}), שבו פועלים במקביל סוכן רשת ובוטים (\en{Network Agent}), סוכן מסגור תקשורתי (\en{Framing Agent}), סוכן אימות פורנזי (\en{Deepfake Multimodal Agent}) וסוכן תחזית אפידמיולוגית (\en{SIRI Simulation Agent}).
+    \item \textbf{שיפוט חוקתי ושער אדם (\en{Constitutional Gate \& Triple-Signature}):} כל ממצא המדורג ברמת חומרה גבוהה מועבר ל\textbf{סוכן הבקרה החוקתי} הבודק התאמה לעקרונות חופש הביטוי, ההסתברות לשיוך זר (\en{FIMI Attribution}) והסכנה לטוהר הבחירות. הפעלת המלצת חסימה או תיוג דורשת חתימה דיגיטלית משולשת של גורמים מוסמכים.
+    \item \textbf{תגובה מאוזנת: התראה והנגשת חיסון תודעתי:} המערכת אינה מוחקת דעות פוליטיות לגיטימיות. היא מנפיקה לכלי התקשורת, לוועדת הבחירות ולציבור דוחות שקיפות טכניים ומסרי \en{Prebunking} אובייקטיביים החושפים טכניקות מניפולציה מזוהות.
+\end{enumerate}
+
+איור~\ref{fig:conops_ch1} מציג את תפיסת ההפעלה מקצה לקצה במבנה זרימה וקטורי.
+
+\begin{figure}[htbp]
+\begin{tikzhebrew}
+\begin{tikzpicture}[
+    node distance=0.85cm and 0.65cm,
+    stage/.style={rectangle, rounded corners=4pt, draw=CivicNavy, fill=CivicGrayBg, line width=1pt, minimum width=3.1cm, minimum height=1.65cm, align=center, font=\small},
+    hub/.style={rectangle, rounded corners=5pt, draw=CivicTeal, fill=CivicTealBg, line width=1.4pt, minimum width=3.5cm, minimum height=1.65cm, align=center, font=\small},
+    gate/.style={rectangle, rounded corners=4pt, draw=CivicRed, fill=CivicRedBg, line width=1.3pt, minimum width=3.2cm, minimum height=1.65cm, align=center, font=\small},
+    outbox/.style={rectangle, rounded corners=4pt, draw=CivicGold, fill=CivicGoldBg, line width=1.2pt, minimum width=3.1cm, minimum height=1.65cm, align=center, font=\small},
+    arr/.style={-{Stealth[length=3mm, width=2mm]}, line width=1.2pt, color=CivicNavy}
+]
+    \node[stage] (s1) {\textbf{\he{1. איסוף גלוי}}\\[2pt]{\scriptsize\he{טלגרם, רשתות, חדשות}}\\{\scriptsize\en{OSINT + $\epsilon$-DP Filter}}};
+    \node[hub, right=of s1] (s2) {\textbf{\he{2. ועדת סוכני AI}}\\[2pt]{\scriptsize\he{רשתות, מסגור, פורנזיקה}}\\{\scriptsize\en{SIRI + ReAct Engine}}};
+    \node[gate, right=of s2] (s3) {\textbf{\he{3. שער חוקתי}}\\[2pt]{\scriptsize\he{הפרדת סמכויות ובג"ץ}}\\{\scriptsize\en{Triple-Key Human Sign}}};
+    \node[outbox, right=of s3] (s4) {\textbf{\he{4. תגובה ומגן}}\\[2pt]{\scriptsize\he{קמפיין חיסון והתראה}}\\{\scriptsize\en{Prebunking + Audit}}};
+
+    \draw[arr] (s1) -- (s2);
+    \draw[arr] (s2) -- (s3);
+    \draw[arr] (s3) -- (s4);
+
+    % Feedback Loop below
+    \node[rectangle, rounded corners=3pt, draw=CivicBlue, fill=CivicNavyBg, line width=0.9pt, below=0.95cm of s2, xshift=1.85cm, minimum width=7.2cm, text width=6.9cm, minimum height=0.85cm, align=center, font=\footnotesize] (fb)
+        {\textbf{\he{לולאת למידה וביקורת (\en{Audit Log}):}} \he{תיעוד קריפטוגרפי בלתי ניתן לשינוי וכיול מחודש של ספי ה-\en{SIRI} וזיהוי \en{Deepfake}}};
+
+    \draw[arr, dashed, color=CivicBlue] (s4.south) |- (fb.east);
+    \draw[arr, dashed, color=CivicBlue] (fb.west) -| (s2.south);
+\end{tikzpicture}
+\end{tikzhebrew}
+\caption{תפיסת ההפעלה המבצעית (CONOPS) מקצה לקצה של מערכת CivicShield AI}
+\label{fig:conops_ch1}
+\end{figure}
+
+\section{מטריצת עמידה בדרישות המכרז הבין-משרדי (RFP Compliance Matrix)}
+כמענה שיטתי לדרישות הגופים המזמינים, ריכזה קבוצת האפיון והצוות האדום (\en{Red Team}) את כלל הדרישות האקדמיות, ההנדסיות, החוקתיות והמבצעיות בטבלת התאמה מחייבת (טבלה~\ref{tab:rfp_compliance}). כל שורה בטבלה ממפה דרישה מכרזית למקום שבו היא מוכחת ומנותחת בדוח מכין זה.
+
+{\renewcommand{\arraystretch}{1.35}
+\begin{table}[htbp]
+\centering
+\caption{מטריצת עמידה והתאמה לדרישות המכרז הממשלתי המשולב}
+\label{tab:rfp_compliance}
+\begin{tabularx}{\textwidth}{|p{1.9cm}|p{3.9cm}|X|p{2.3cm}|}
+\hline
+\textbf{\textcolor{CivicNavy}{מזהה}} & \textbf{\textcolor{CivicNavy}{דרישת המכרז}} & \textbf{\textcolor{CivicNavy}{מענה תכנוני ואדריכלי בדוח}} & \textbf{\textcolor{CivicNavy}{עוגן בדוח}} \\ \hline
+\en{RFP-01} & תיאום בין תקשורת פוליטית ומדעי המדינה להנדסת \en{AI} & תרגום פורמלי של 7 תיאוריות יסוד (קביעת סדר יום, מסגור, ספירלת השתיקה, חיסון) לרכיבי קוד וצינורות חישוב. & פרק~\ref{ch:theory} \\ \hline
+\en{RFP-02} & גילוי מוקדם של התנהגות מתואמת (\en{CIB}) ורשתות \en{FIMI} & ניתוח גרפים דינמי, אשכול סינכרוניזציה בזמן תגובה וייחוס מקוריות טקסטואלית מול בוטים. & פרקים~\ref{ch:requirements}, \ref{ch:architecture} \\ \hline
+\en{RFP-03} & זיהוי \en{Deepfake} מולטי-מודאלי בזמן אמת & מנוע איחוד בייסיאני (\en{Audio + Video + Metadata Provenance}) בעל \en{AUC > 0.96}. & פרק~\ref{ch:math} \\ \hline
+\en{RFP-04} & חיזוי התפשטות נרטיבים וקיטוב אפקטיבי & הרצת משוואות דיפרנציאליות \en{SIRI} ומודל \en{Hegselmann-Krause} לכימות סף התפרצות (\en{$R_0$}). & פרק~\ref{ch:math} \\ \hline
+\en{RFP-05} & זמינות גבוהה וביצועים ביום הבחירות & ארכיטקטורת \en{M/M/c} אלסטית, השהיה ממוצעת מתחת ל-\en{250ms} תחת שרידות \en{99.99\%}. & פרק~\ref{ch:math} \\ \hline
+\en{RFP-06} & הגנה על חופש הביטוי ואיסור צנזורה אלגוריתמית & סוכן בקרה חוקתי מופרד ארגונית ומנגנון חתימה קריפטוגרפית משולש המחייב אישור שופט. & פרק~\ref{ch:ethics} \\ \hline
+\en{RFP-07} & ישימות כלכלית, תוכנית עבודה וניהול סיכונים & תוכנית 4-שלבית ל-24 חודשים, ניתוח עלות-תועלת רב-שנתי ומערך מדדי \en{KPI/SLA}. & פרק~\ref{ch:roadmap} \\ \hline
+\en{RFP-08} & מתודולוגיית תזמור רב-סוכנים לפי עקרונות הקורס & הפעלת ועדת 5 סוכנים (\en{Master, Theory, Architect, Simulator, RedTeam}) ובקרת איכות רציפה. & פרק~\ref{ch:methodology} \\ \hline
+\end{tabularx}
+\end{table}}
+
+\section{תרומת הפרויקט ומבנה הדוח המכין}
+הערך המוסף של \en{CivicShield AI} נובע מסירוב מתודולוגי לראות בלוחמת התודעה בעיית אבטחת מידע בלבד. זיוף סרטון או פריצת שרת הם מעשים טכנולוגיים, אך התכלית שלהם פוליטית ותקשורתית: לערער את אמון הציבור בטוהר הקלפי, להחריף ניכור קבוצתי ולעוות את המרחב הדליברטיבי. לפיכך, שמונה פרקי דוח זה בנויים בשיטת "גשר דו-צדדי":
+
+\begin{theorybox}[מפת הדרכים של שמונת פרקי הדוח]
+\begin{itemize}
+    \item \textbf{פרק 2 (תשתית תיאורטית):} מנתח לעומק כיצד תקיפות מידע משבשות מנגנונים של \en{Agenda Setting}, \en{Framing} והמרחב הציבורי של הברמאס.
+    \item \textbf{פרק 3 (אפיון דרישות ותרחישים):} ממפה 15 דרישות פונקציונליות (\en{FR}), דרישות ביצוע (\en{NFR}), ו-4 תרחישי קיצון של יום הבחירות.
+    \item \textbf{פרק 4 (ארכיטקטורה וועדת סוכנים):} פורש ארכיטקטורה בת 5 שכבות ואת מנגנון לולאת \en{ReAct}, לוח ה-\en{TODO} וה-\en{Hub} התקשורתי.
+    \item \textbf{פרק 5 (מודלים מתמטיים וסימולציות):} מציג פיתוח מתמטי פורמלי וארבע הרצות סימולציה מדעיות ב-\en{Python}.
+    \item \textbf{פרק 6 (משפט חוקתי ואתיקה):} מנסח את מסגרת הבלימה החוקתית, הפרטיות הדיפרנציאלית ומנגנון החתימה המשולש.
+    \item \textbf{פרק 7 (סיכונים, מפת דרכים ותקציב):} מעמיד לוח גאנט דו-שנתי, תקציב מפורט, ניתוח סיכוני אבטחה והגנת מודלים.
+    \item \textbf{פרק 8 (מתודולוגיה וביבליוגרפיה):} מדגים כיצד הדוח עצמו נבנה ונערך באמצעות ועדת המומחים הרב-סוכנית לפי שיעור 4.
+\end{itemize}
+\end{theorybox}

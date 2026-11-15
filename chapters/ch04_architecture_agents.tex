@@ -1,0 +1,187 @@
+% ==============================================================================
+% Chapter 4: 5-Layer System Architecture & Lesson 4 Multi-Agent Orchestration
+% ==============================================================================
+\chapter{ארכיטקטורת המערכת, תזמור רב-סוכנים וצינורות הנתונים}
+\label{ch:architecture}
+
+\section{מדוע מודל שפה יחיד (Monolithic LLM) נכשל במשימת הגנה לאומית?}
+ניסיונות ראשונים להפעיל מודל שפה גדול יחיד (\en{Single Monolithic Prompt}) לניתוח תעמולה ולוחמת תודעה ברשתות חברתיות נתקלו בארבעה כשלים מבניים חמורים:
+\begin{enumerate}
+    \item \textbf{זיהום חלון הקשר (\en{Context Pollution}):} ערבוב תכנים עוינים, גרפי רשת, תמלילי אודיו והנחיות חוקתיות בתוך הקשר יחיד גורם לדעיכת קשב (\en{Lost in the Middle}) ומעלה את הרגישות להזרקות פרומפט (\en{Indirect Prompt Injection}) מצד התוקף.
+    \item \textbf{הזיות מתמטיות (\en{Quantitative Hallucination}):} מודלי שפה אינם אמינים בחישוב מקדמי התפרצות דיפרנציאליים (\en{SIRI}) או היסק בייסיאני על ספקטרום אודיו — משימות אלה חייבות להתבצע בכלים דטרמיניסטיים ב-\en{Python}.
+    \item \textbf{קונפליקט תפקידים (\en{Role Conflict}):} סוכן שאומן לאתר איומים מקסימליים נוטה להתראות שווא יתר על המידה (\en{Over-Flagging}), אלא אם פועל מולו סוכן עצמאי מנוגד שיעודו להגן על חופש הביטוי ולבקר ממצאים.
+    \item \textbf{תקרת השהיה ועלות (\en{Latency \& Token Bottleneck}):} הרצת מודל ענק על גבי 12,000 אירועים בשנייה אינה ישימה כלכלית או הנדסית. ארכיטקטורה מדורגת מפרידה בין סינון זול ומהיר (\en{Flash / Triage Models}) לבין עיון עומק סלקטיבי (\en{Pro Reasoning Mesh}).
+\end{enumerate}
+
+כמענה הנדסי ישיר, תוכננה מערכת \en{CivicShield AI} על גבי תבנית התזמור הרב-סוכנית (\en{Multi-Agent Orchestration Architecture}) שנלמדה בשיעור 4 \cite{segal2026l04}: הפרדה מלאה בין מתזמר מרכזי, סביבת עבודה ומערכת ראיות לכל סוכן מומחה, מרכז תקשורת מבוזר (\en{Communication Hub}), לוח משימות משותף (\en{Shared TODO Board}) ולולאות חשיבה-פעולה-תצפית (\en{ReAct}) \cite{yao2022react, wu2023autogen}.
+
+\section{ארכיטקטורת חמש השכבות של CivicShield AI}
+המערכת מבוססת על חמש שכבות מבודדות התומכות בהפרדת סמכויות מוסדית ובהזרמת נתונים מקבילית בקצב גבוה. איור~\ref{fig:five_layer_arch} ממחיש את השכבות, פרוטוקולי התקשורת והחיץ הקריפטוגרפי ביניהן.
+
+\begin{figure}[htbp]
+\begin{tikzhebrew}
+\begin{tikzpicture}[
+    node distance=0.45cm,
+    layer/.style={rectangle, rounded corners=4pt, draw=CivicNavy, line width=1.1pt, minimum width=11.4cm, minimum height=1.22cm, align=center, font=\footnotesize},
+    secbar/.style={rectangle, rounded corners=4pt, draw=CivicRed, fill=CivicRedBg, line width=1pt, minimum width=2.4cm, minimum height=7.9cm, align=center, font=\scriptsize},
+    auditbar/.style={rectangle, rounded corners=4pt, draw=CivicGold, fill=CivicGoldBg, line width=1pt, minimum width=2.3cm, minimum height=7.9cm, align=center, font=\scriptsize},
+    arr/.style={-{Stealth[length=2.4mm]}, line width=1.1pt, color=CivicNavy}
+]
+    % 5 Core Horizontal Layers
+    \node[layer, fill=CivicGrayBg] (L1) {\textbf{\he{שכבה 1: קליטת זרמי \en{OSINT} וסינון פרטיות}} \\ \scriptsize\en{Kafka / Flink Stream Adapters (Telegram, X, News RSS) + PII Redactor \& $\epsilon$-DP Noise}};
+    \node[layer, fill=CivicNavyBg, below=of L1] (L2) {\textbf{\he{שכבה 2: חילוץ מאפיינים ואימות פורנזי מהיר}} \\ \scriptsize\en{Embedding Vectors, CIB Temporal Clustering, Acoustic/Visual Deepfake Classifiers}};
+    \node[layer, fill=CivicTealBg, draw=CivicTeal, line width=1.4pt, below=of L2] (L3) {\textbf{\he{שכבה 3: מערך התזמור הרב-סוכני (\en{Multi-Agent Mesh + ReAct Engine})}} \\ \scriptsize\en{Master Orchestrator | Hub | Shared TODO | Framing, SIRI \& Forensic Tool-Calling Agents}};
+    \node[layer, fill=CivicRedBg, draw=CivicRed, line width=1.3pt, below=of L3] (L4) {\textbf{\he{שכבה 4: שער הבקרה החוקתי ומנגנון חתימה משולשת}} \\ \scriptsize\en{Constitutional Guardrail Agent | Freedom of Speech Policy | 3-of-3 Ed25519 Human Quorum}};
+    \node[layer, fill=CivicGoldBg, draw=CivicGold, below=of L4] (L5) {\textbf{\he{שכבה 5: הפצת חיסון תודעתי, דשבורד תקשורת ושקיפות}} \\ \scriptsize\en{Prebunking Content Feeds | Accredited Journalist API | Open Public Transparency Portal}};
+
+    % Connecting arrows between layers
+    \draw[arr] (L1) -- (L2);
+    \draw[arr] (L2) -- (L3);
+    \draw[arr] (L3) -- (L4);
+    \draw[arr] (L4) -- (L5);
+
+    % Left Side Vertical Security Sandbox Bar
+    \node[secbar, left=0.35cm of L3] (sec) {\textbf{\he{מעטפת אבטחה}}\\[4pt]\en{Zero-Trust}\\\en{mTLS + HSM}\\[4pt]\he{ארגז חול}\\\he{נגד הזרקת}\\\en{Prompt}};
+
+    % Right Side Vertical Immutable Merkle Audit Ledger
+    \node[auditbar, right=0.35cm of L3] (aud) {\textbf{\he{יומן ביקורת}}\\[4pt]\en{Immutable}\\\en{Merkle Log}\\[4pt]\he{תיעוד חתום}\\\he{לביקורת}\\\he{בית המשפט}};
+
+    \draw[dashed, color=CivicRed, line width=0.8pt] (sec.east) -- (L2.west);
+    \draw[dashed, color=CivicRed, line width=0.8pt] (sec.east) -- (L3.west);
+    \draw[dashed, color=CivicGold, line width=0.8pt] (L3.east) -- (aud.west);
+    \draw[dashed, color=CivicGold, line width=0.8pt] (L4.east) -- (aud.west);
+\end{tikzpicture}
+\end{tikzhebrew}
+\caption{ארכיטקטורת חמש השכבות של CivicShield AI וממשקי האבטחה והביקורת}
+\label{fig:five_layer_arch}
+\end{figure}
+
+להלן פירוט האחריות ההנדסית של כל שכבה:
+\begin{itemize}
+    \item \textbf{שכבה 1 (קליטה אנונימית):} חיבוריות מבוססת \en{Apache Kafka} ו-\en{Apache Flink} הקולטת פוסטים ציבוריים בזמן אמת, מסירה מזהי אזרחים פרטיים (\en{Phone/ID Hashing}) ומפעילה חלון צבירה אנונימי.
+    \item \textbf{שכבה 2 (ניתוח תכונות ופורנזיקה):} חילוץ וקטורים סמנטיים בעברית ובערבית, אשכול זיהוי בוטים (\en{CIB}) תחת חלון זמן זעיר, ושרת ייעודי (\en{ONNX/Triton GPU}) להפקת ציוני זיוף מולטי-מודאליים.
+    \item \textbf{שכבה 3 (רשת הסוכנים המומחים):} הלב הקוגניטיבי. רק אירועים החוצים סף אנומליה (\en{Triage Gate}) מקודמים לחקירה רב-סוכנית מלאה, וכך נחסכים \en{94\%} מעלויות הסקת ה-\en{LLM}.
+    \item \textbf{שכבה 4 (השער החוקתי):} מערכת בלימה דטרמיניסטית וקוגניטיבית. סוכן הבקרה החוקתי רשאי לעצור כל פלט של סוכן טכנולוגי, והחתימה האנושית המשולשת מונעת צנזורה ממוכנת.
+    \item \textbf{שכבה 5 (תפוצה ובקרה ציבורית):} ממשקי \en{REST/WebSocket} לתקשורת הכתובה והמשודרת, ערוץ פרסום לקמפייני חיסון תודעתי של ועדת הבחירות, ופורטל אודיט ציבורי.
+\end{itemize}
+
+\section{תזמור צוות הסוכנים: Hub, Inbox, TODO Board ולולאת ReAct}
+על בסיס מתודולוגיית התזמור המוצגת בשיעור 4 \cite{segal2026l04}, שכבה 3 אינה פועלת כצנרת נוקשה אלא כוועדת מומחים דינמית המתכתבת באמצעות פרוטוקול הודעות מובנה. איור~\ref{fig:multiagent_mesh_react} מציג את טופולוגיית ועדת הסוכנים המבצעית ואת לולאת ה-\en{ReAct} הפנימית בכל סוכן.
+
+\begin{figure}[htbp]
+\begin{tikzhebrew}
+\begin{tikzpicture}[
+    node distance=0.8cm and 0.65cm,
+    master/.style={rectangle, rounded corners=5pt, draw=CivicNavy, fill=CivicNavy, text=white, line width=1.4pt, minimum width=5.0cm, minimum height=1.25cm, align=center, font=\small},
+    hub/.style={rectangle, rounded corners=4pt, draw=CivicTeal, fill=CivicTealBg, line width=1.3pt, minimum width=4.6cm, minimum height=1.15cm, align=center, font=\footnotesize},
+    board/.style={rectangle, rounded corners=4pt, draw=CivicGold, fill=CivicGoldBg, line width=1.2pt, minimum width=4.4cm, minimum height=1.15cm, align=center, font=\footnotesize},
+    agent/.style={rectangle, rounded corners=4pt, draw=CivicBlue, fill=CivicNavyBg, line width=1pt, minimum width=2.85cm, minimum height=1.45cm, align=center, font=\scriptsize},
+    redteam/.style={rectangle, rounded corners=4pt, draw=CivicRed, fill=CivicRedBg, line width=1.2pt, minimum width=2.95cm, minimum height=1.45cm, align=center, font=\scriptsize},
+    react/.style={rectangle, dashed, rounded corners=4pt, draw=CivicSlate, fill=CivicGrayBg, line width=0.9pt, minimum width=12.4cm, minimum height=1.0cm, align=center, font=\footnotesize},
+    arr/.style={-{Stealth[length=2.2mm]}, line width=1pt, color=CivicNavy},
+    biarr/.style={{Stealth[length=2.1mm]}-{Stealth[length=2.1mm]}, line width=0.95pt, color=CivicTeal}
+]
+    % Master at Top
+    \node[master] (M) {\textbf{\he{סוכן על-מתזמר (\en{Master Orchestrator})}}\\[2pt]{\scriptsize\en{Decompose Case | Assign Quotas | Synthesize Ruling}}};
+
+    % Hub & TODO Board below Master
+    \node[hub, below left=0.85cm and -0.4cm of M] (H) {\textbf{\he{מרכז תקשורת (\en{Communication Hub})}}\\[2pt]{\scriptsize\en{Async Typed Envelopes -> Agent Inboxes}}};
+    \node[board, below right=0.85cm and -0.4cm of M] (B) {\textbf{\he{לוח משימות משותף (\en{Shared TODO})}}\\[2pt]{\scriptsize\en{State: Pending / In-Progress / Verified}}};
+
+    \draw[arr] (M) -- (H);
+    \draw[arr] (M) -- (B);
+    \draw[biarr, color=CivicGold] (H) -- (B);
+
+    % Five Specialist Subagents Row
+    \node[agent] (A1) at (-5.8, -4.4) {\textbf{\he{סוכן רשת ובוטים}}\\{\tiny\en{[Inbox] CIB Graph}}\\{\tiny\en{Tools: PyGraph, Cluster}}};
+    \node[agent] (A2) at (-2.9, -4.4) {\textbf{\he{סוכן מסגור אנטמן}}\\{\tiny\en{[Inbox] Narrative Frame}}\\{\tiny\en{Tools: HebrewNLP, Lex}}};
+    \node[agent] (A3) at (0.0, -4.4) {\textbf{\he{סוכן פורנזיקה}}\\{\tiny\en{[Inbox] Deepfake Trio}}\\{\tiny\en{Tools: Bayes, C2PA}}};
+    \node[agent] (A4) at (2.9, -4.4) {\textbf{\he{סוכן סימולציה}}\\{\tiny\en{[Inbox] Contagion ODE}}\\{\tiny\en{Tools: SIRI, H-K Py}}};
+    \node[redteam] (A5) at (5.8, -4.4) {\textbf{\he{בקרה חוקתית}}\\{\tiny\en{[Inbox] Red Team Veto}}\\{\tiny\en{Tools: SpeechGuard}}};
+
+    \draw[biarr] (H.south) -- ++(0,-0.45) -| (A1.north);
+    \draw[biarr] (H.south) -- ++(0,-0.45) -| (A2.north);
+    \draw[biarr] (H.south) -- (A3.north);
+    \draw[biarr] (H.south) -- ++(0,-0.45) -| (A4.north);
+    \draw[biarr, color=CivicRed] (H.south) -- ++(0,-0.45) -| (A5.north);
+
+    % ReAct Loop Footer inside Specialist Execution Layer
+    \node[react] (R) at (0, -6.15) {\textbf{\he{לולאת ביצוע פנימית בכל סוכן (\en{ReAct Loop}):}} \quad
+        \en{Thought} (\he{תכנון חקירה}) $\longrightarrow$ \en{Action} (\he{כלי \en{Python} / DB}) $\longrightarrow$ \en{Observation} (\he{ראיה}) $\longrightarrow$ \en{Confidence}};
+
+    \draw[dashed, color=CivicSlate] (A1.south) -- (A1.south |- R.north);
+    \draw[dashed, color=CivicSlate] (A3.south) -- (R.north);
+    \draw[dashed, color=CivicSlate] (A5.south) -- (A5.south |- R.north);
+\end{tikzpicture}
+\end{tikzhebrew}
+\caption{טופולוגיית התזמור הרב-סוכנית בשכבה 3: מתזמר, Hub, תיבות Inbox, לוח TODO ולולאת ReAct}
+\label{fig:multiagent_mesh_react}
+\end{figure}
+
+\subsection{חלוקת התפקידים בין הסוכנים והאינטראקציה בלולאת ReAct}
+כאשר שכבה 2 מזהה אירוע העובר את סף הדחיקות (\en{Triage Threshold}), מתזמר העל (\en{Master}) פותח "תיק אירוע" בלוח ה-\en{TODO} ומנפיק מטלות מבוזרות לסוכנים המומחים דרך ה-\en{Communication Hub}. כל סוכן פועל מתוך \en{Inbox} נפרד משלו ומבצע מחזורי \en{ReAct} (חשיבה $\leftarrow$ הפעלת כלי $\leftarrow$ קליטת תצפית) עד לגיבוש ממצא מגובה ראיות:
+\begin{itemize}
+    \item \textbf{סוכן הרשתות (\en{CIB Graph Agent}):} מתחקר מדגם גרף טמפורלי באמצעות אלגוריתמי אשכולות ובודק האם קיים דפוס סינכרוני של פרסום חוצה-קבוצות.
+    \item \textbf{סוכן המסגור (\en{Framing \& Agenda Agent}):} משווה את מפת 4 פונקציות אנטמן של האשכול לשיח הנורמטיבי ב-30 הימים הקודמים.
+    \item \textbf{סוכן הפורנזיקה (\en{Forensic Agent}):} קורא לכלי אימות ספקטרלי, בודק חתימות \en{C2PA} ומפיק הסתברות אחורית (\en{Bayesian Posterior}).
+    \item \textbf{סוכן הסימולציה (\en{Simulator Agent}):} מפעיל את מנוע משוואות ה-\en{SIRI} ב-\en{Python} כדי להעריך תוך כמה שעות יגיע קצב החשיפה לשיא.
+    \item \textbf{סוכן הבקרה החוקתית (\en{Constitutional \& RedTeam Agent}):} מקבל גישה לקריאה של כלל הממצאים לפני שמתזמר העל רשאי להוציא המלצה, ומריץ "מבחן היפוך מפלגתי": האם היינו מסמנים הודעה דומה לו נכתבה על ידי יריב פוליטי באותן נסיבות?
+\end{itemize}
+
+\section{מפרט פרוטוקול התקשורת הבין-סוכני (Hub JSON Envelope)}
+למניעת עמימות והעברת הוראות חופשית שעלולה לזהם את חלון ההקשר בין סוכנים, כל תקשורת ב-\en{Communication Hub} נאכפת בסכמת \en{JSON} קשיחה המאומתת באמצעות \en{Pydantic Schema}. הקוד שלהלן מציג מעטפת טיפוסית הנשלחת מסוכן הסימולציה ומקודמת לבחינת סוכן הבקרה החוקתית:
+
+\begin{otherlanguage}{english}
+\begin{tcolorbox}[
+  colback=CivicGrayBg, colframe=CivicNavy,
+  coltitle=white, colbacktitle=CivicNavy,
+  fonttitle=\sffamily\bfseries\footnotesize,
+  title={Listing 4.1: CivicShield Inter-Agent Typed Envelope Protocol (Hub -> Constitutional Gate)},
+  arc=3pt, boxrule=0.9pt, left=8pt, right=8pt, top=6pt, bottom=6pt
+]
+\footnotesize
+\begin{verbatim}
+{
+  "envelope_id": "csai-2026-11-04T08:19:42Z-0091",
+  "case_id": "CASE-EL-2026-441",
+  "sender_agent": "simulator_siri_agent",
+  "recipient_agent": "constitutional_guardrail_agent",
+  "priority": "CRITICAL_P0",
+  "trace_react": {
+    "thought": "Bot cluster velocity exceeds critical threshold; compute SIRI R0.",
+    "action": "run_siri_ode(beta=0.68, gamma=0.14, seed_fraction=0.015)",
+    "observation": {"R0": 4.86, "critical_vax_pc": 0.794, "time_to_peak_days": 6.4}
+  },
+  "evidence_metrics": {
+    "cib_sync_score": 0.93,
+    "deepfake_posterior": 0.974,
+    "entman_panic_frame": 0.88,
+    "privacy_dp_epsilon_spent": 0.14
+  },
+  "recommended_intervention": "ISSUE_NEUTRAL_PREBUNKING_TEMPLATE_B",
+  "auto_censor_permitted": false,
+  "requires_quorum_signatures": ["CEC_JUDGE", "INCD_DIRECTOR", "PUBLIC_OMBUDSMAN"]
+}
+\end{verbatim}
+\end{tcolorbox}
+\end{otherlanguage}
+
+\section{תקציב השהיה (Latency Budget) במערכות שכבות}
+עמידה ביעד \en{NFR-01} של השהיה ממוצעת תחת \en{250\,ms} דורשת פירוק דטרמיניסטי של תקציב הזמן בין חמש השכבות (טבלה~\ref{tab:latency_budget}). אירועים שאינם מעלים חשד בסיסי מסתיימים כבר בשכבה 2 תוך \en{56\,ms} בממוצע; אירועים חריגים המקודמים לרשת הסוכנים נכנסים למסלול המקבילי ושומרים על ממוצע מערכתי מבוזר היטב מתחת לתקרת ה-\en{SLA}.
+
+{\renewcommand{\arraystretch}{1.35}
+\begin{table}[htbp]
+\centering
+\caption{תקציב השהיית עיבוד מוקצה לכל שכבה בעומס שיא (12,000 אירועים/שנייה)}
+\label{tab:latency_budget}
+\begin{tabularx}{\textwidth}{|p{3.4cm}|p{2.3cm}|p{2.5cm}|X|}
+\hline
+\textbf{\textcolor{CivicNavy}{שכבת עיבוד}} & \textbf{\textcolor{CivicNavy}{תקציב (מ"ש)}} & \textbf{\textcolor{CivicNavy}{שיעור תעבורה}} & \textbf{\textcolor{CivicNavy}{מנגנון האצה הנדסי}} \\ \hline
+שכבה 1: קליטה ו-\en{$\epsilon$-DP} & \en{18\,ms} & \en{100\%} & עיבוד זרם בזיכרון (\en{Apache Flink Stateful Ops}). \\ \hline
+שכבה 2: וקטור ופורנזיקה מהירה & \en{38\,ms} & \en{100\%} & אימות באצווה (\en{Dynamic Batching}) במאיצי \en{GPU} ייעודיים. \\ \hline
+שכבה 3א': סינון סוכן טריאז' & \en{45\,ms} & \en{6\%} & מודל קל מקוונטז (\en{INT8 Flash Model}) בסימון מוקדם. \\ \hline
+שכבה 3ב': ועדת \en{ReAct} מקבילית & \en{115\,ms} & \en{0.8\%} & הרצה מקבילית (\en{Fan-Out}) של כלים ב-\en{Python} ללא תלות טורית. \\ \hline
+שכבה 4–5: שער חוקתי ויומן & \en{22\,ms} & \en{0.8\%} & מנוע חוקים דטרמיניסטי (\en{OPA/Rego}) וכתיבה א-סינכרונית ל-\en{Merkle}. \\ \hline
+\textbf{\textcolor{CivicNavy}{סך מסלול קריטי מלא}} & \textbf{\en{238\,ms}} & \textbf{עומד ב-\en{<250\,ms}} & \textbf{קיימת יתרת אמינות של \en{12\,ms} בעומס שיא (פרק~\ref{ch:math}).} \\ \hline
+\end{tabularx}
+\end{table}}

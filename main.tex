@@ -1,0 +1,243 @@
+% ==============================================================================
+% CivicShield AI ("מגן התודעה הלאומי") - Main LaTeX Entry Point
+% Assignment 2: Preliminary Engineering & Academic Design Report
+% University of Haifa | Applied AI & Vibe Coding (Dr. Yoram Segal)
+% ==============================================================================
+\documentclass{civicshield}
+
+\begin{document}
+
+% ==============================================================================
+% TITLE PAGE (COVER)
+% ==============================================================================
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{otherlanguage}{english}
+\noindent
+\begin{tikzpicture}[remember picture, overlay]
+    % Deep Navy Full-Bleed Top Banner
+    \fill[CivicNavy] (current page.north west) rectangle ([yshift=-11.8cm]current page.north east);
+    % Gold & Teal Accent Bars
+    \fill[CivicGold] ([yshift=-11.8cm]current page.north west) rectangle ([yshift=-12.02cm]current page.north east);
+    \fill[CivicTeal] ([yshift=-12.02cm]current page.north west) rectangle ([yshift=-12.18cm]current page.north east);
+
+    % Subtle geometric security grid in top banner
+    \begin{scope}[shift={(current page.north west)}]
+        \foreach \x in {0, 1.5, ..., 21} {
+            \draw[CivicBlue, opacity=0.35, line width=0.4pt] (\x cm, 0) -- (\x cm, -11.8cm);
+        }
+        \foreach \y in {-1, -2.5, ..., -10} {
+            \draw[CivicBlue, opacity=0.35, line width=0.4pt] (0, \y cm) -- (21cm, \y cm);
+        }
+    \end{scope}
+
+    % Bottom Footer Strip
+    \fill[CivicNavy] (current page.south west) rectangle ([yshift=2.2cm]current page.south east);
+    \fill[CivicTeal] ([yshift=2.2cm]current page.south west) rectangle ([yshift=2.35cm]current page.south east);
+    \node[text=white, text width=18cm, align=center, font=\sffamily\normalsize] at ([yshift=1.1cm]current page.south) {
+        \textbf{\he{קורס:}} \he{יישומי בינה מלאכותית ו-\en{Vibe Coding} (שיעור 4: \en{Multi-Agent Orchestration})} \quad|\quad \textbf{\he{מרצה:}} \he{ד"ר יורם סגל}\\[4pt]
+        \textbf{\he{מגיש הפרויקט:}} \en{ShmuelTetroashvili} \quad|\quad \textbf{\he{תאריך הפקה:}} \he{נובמבר 2026} \quad|\quad \textbf{\he{גרסה:}} \en{v1.0-RFP-FINAL}
+    };
+\end{tikzpicture}
+
+\vspace*{-1.75cm}
+\begin{center}
+    % Top institutional tag in gold
+    {\color{CivicGold}\sffamily\bfseries\large UNIVERSITY OF HAIFA \quad|\quad NATIONAL TENDER PRELIMINARY REPORT}\\[0.3cm]
+    {\color{white}\sffamily\bfseries\large \he{אוניברסיטת חיפה — קורס יישומי \en{AI} ו-\en{Vibe Coding} (ד"ר יורם סגל)}}\\[0.55cm]
+
+    % Vector CivicShield Emblem (pure TikZ)
+    \begin{tikzpicture}[scale=0.88]
+        % Outer Glow Circle
+        \fill[CivicBlue!60!CivicNavy, opacity=0.45] (0,0) circle (2.25cm);
+        \draw[CivicTeal, line width=1.4pt, dashed] (0,0) circle (2.05cm);
+        % Main Shield Polygon
+        \path[fill=CivicNavy!85!black, draw=CivicGold, line width=2pt]
+            (0, 1.75) -- (1.45, 1.2) -- (1.35, -0.35) .. controls (1.1, -1.25) and (0.4, -1.65) .. (0, -1.85)
+            .. controls (-0.4, -1.65) and (-1.1, -1.25) .. (-1.35, -0.35) -- (-1.45, 1.2) -- cycle;
+        % Inner Teal Shield Accent
+        \path[draw=CivicTeal, line width=1pt]
+            (0, 1.48) -- (1.18, 1.0) -- (1.1, -0.3) .. controls (0.9, -1.02) and (0.32, -1.35) .. (0, -1.52)
+            .. controls (-0.32, -1.35) and (-0.9, -1.02) .. (-1.1, -0.3) -- (-1.18, 1.0) -- cycle;
+        % Multi-Agent Mesh Nodes inside Shield (5 Agents + Hub)
+        \node[circle, fill=CivicGold, inner sep=2.8pt] (hub) at (0, 0.05) {};
+        \node[circle, fill=CivicTeal, inner sep=2pt] (n1) at (0, 0.85) {};
+        \node[circle, fill=CivicTeal, inner sep=2pt] (n2) at (0.75, 0.35) {};
+        \node[circle, fill=CivicTeal, inner sep=2pt] (n3) at (0.5, -0.65) {};
+        \node[circle, fill=CivicTeal, inner sep=2pt] (n4) at (-0.5, -0.65) {};
+        \node[circle, fill=CivicTeal, inner sep=2pt] (n5) at (-0.75, 0.35) {};
+        \draw[CivicTeal!80!white, line width=0.8pt] (hub)--(n1) (hub)--(n2) (hub)--(n3) (hub)--(n4) (hub)--(n5);
+        \draw[CivicGold!70!white, line width=0.6pt, opacity=0.75] (n1)--(n2)--(n3)--(n4)--(n5)--(n1);
+    \end{tikzpicture}
+
+    \vspace{0.25cm}
+    {\color{white}\sffamily\bfseries\Huge CivicShield AI}\\[0.25cm]
+    {\color{CivicGold}\sffamily\bfseries\LARGE \he{מגן התודעה הלאומי}}
+\end{center}
+
+\vspace{2.25cm}
+\begin{center}
+    {\color{CivicNavy}\sffamily\bfseries\Large \he{דוח מכין (\en{Preliminary Design Report}) להקמת מערכת רב-סוכנית לאומית}}\\[0.25cm]
+    {\color{CivicBlue}\sffamily\bfseries\large \he{להגנה על הספרה הציבורית, זיהוי מניפולציות תודעה ושמירה על טוהר הבחירות}}\\[0.45cm]
+    {\color{CivicSlate}\sffamily\normalsize \he{סינתזה בין-תחומית: מדעי המדינה, תקשורת פוליטית והנדסת מערכות \en{Multi-Agent AI}}}
+\end{center}
+
+\vspace{0.55cm}
+\begin{center}
+\begin{tcolorbox}[colback=CivicGrayBg, colframe=CivicNavy, width=0.92\textwidth, arc=4pt, boxrule=1pt, left=12pt, right=12pt, top=10pt, bottom=10pt]
+\begin{otherlanguage}{hebrew}
+\textbf{\textcolor{CivicNavy}{מענה למכרז ממשלתי משותף (מדומיין לצורכי המטלה):}}
+ועדת הבחירות המרכזית (CEC), מערך הסייבר הלאומי (INCD) ומשרד המשפטים.\\[4pt]
+\textbf{\textcolor{CivicNavy}{פרדיגמת התכנון:}}
+חיסון תודעתי פרואקטיבי (\en{Cognitive Prebunking}), ניתוח מסגור פוליטי, זיהוי רשתות בוטים ו-\en{Deepfakes} באמצעות ועדת סוכני \en{AI} מתואמת, תחת הפרדת רשויות ופיקוח שיפוטי משולש (\en{Human-in-the-Loop}).\\[4pt]
+\textbf{\textcolor{CivicNavy}{מתודולוגיית הכנה:}}
+ועדת מומחים של 5 סוכנים אוטונומיים (\en{Master, Theory, Architect, Simulator, RedTeam}) לפי עקרונות שיעור 4, בשילוב סימולציות כמותיות ב-\en{Python} וגרפיקה וקטורית ב-\en{TikZ}.
+\end{otherlanguage}
+\end{tcolorbox}
+\end{center}
+
+\end{otherlanguage}
+\end{titlepage}
+
+% ==============================================================================
+% PAGE 2: DOCUMENT CONTROL & TENDER METADATA
+% ==============================================================================
+\clearpage
+\chapter*{בקרת מסמך, מפרט המכרז ותקציר מנהלים מוסדי}
+\addcontentsline{toc}{chapter}{בקרת מסמך, מפרט המכרז ותקציר מנהלים מוסדי}
+
+\begin{rfpbox}[זהות ההגשה ונתוני ייחוס מכרזיים]
+מסמך זה מהווה את \textbf{הדוח המכין (Preliminary Engineering \& Academic Design Report)} במסגרת מטלה 2 בקורס יישומי \en{AI} באוניברסיטת חיפה. המסמך בנוי במתכונת של תיק מכרז ממשלתי מחייב, המפרט את ההיתכנות התיאורטית, האדריכלות ההנדסית, המודלים המתמטיים, המגבלות החוקתיות והתקציב להקמת מערכת \en{CivicShield AI} ("מגן התודעה הלאומי").
+\end{rfpbox}
+
+\vspace{0.2cm}
+{\renewcommand{\arraystretch}{1.35}
+\begin{tabularx}{\textwidth}{|p{4.3cm}|X|}
+\hline
+\textbf{\textcolor{CivicNavy}{שדה בקרה}} & \textbf{\textcolor{CivicNavy}{פירוט מחייב}} \\ \hline
+שם הפרויקט והמערכת & \en{CivicShield AI} — מערכת לאומית להגנת הספרה הציבורית וטוהר הבחירות \\ \hline
+מזהה תיק ומהדורה & \en{GOV-IL-RFP-2026-CSAI} \quad|\quad מהדורה \en{1.0} (דוח מכין סופי) \\ \hline
+גופים מזמינים (משולב) & ועדת הבחירות המרכזית, מערך הסייבר הלאומי, הייעוץ המשפטי לממשלה \\ \hline
+דיסציפלינות ליבה & תקשורת פוליטית, מדעי המדינה, הנדסת \en{Multi-Agent AI}, סייבר ומשפט חוקתי \\ \hline
+סוג המסמך ואופיו & מסמך אפיון והיתכנות קודם-מימוש (\en{Pre-Implementation Specification}) \\ \hline
+ארכיטקטורת תיעוד & מודולרית ב-\en{LuaLaTeX} (\en{civicshield.cls}), 8 פרקים, 6 גרפי \en{Python}, תרשימי \en{TikZ} \\ \hline
+סטטוס אישור ועדת סוכנים & אושר לאחר ביקורת צוות אדום (\en{Red Team Audit Pass \#2}) — ללא ממצאים קריטיים \\ \hline
+\end{tabularx}}
+
+\vspace{0.5cm}
+\section*{תקציר אקדמי והנדסי (Abstract)}
+המעבר המואץ של השיח הפוליטי אל פלטפורמות אלגוריתמיות ריכוזיות, לצד הזמינות הגוברת של מודלי שפה גדולים (\en{LLMs}) וכלי סינתזה אודיו-ויזואליים (\en{Deepfakes}), שינה באופן מבני את פגיעותן של דמוקרטיות מודרניות. מבצעי השפעה זרים (\en{Foreign Information Manipulation and Interference -- FIMI}) ורשתות בוטים אוטונומיות מסוגלים כיום לעצב את סדר היום התקשורתי, להקצין מסגרות פרשנות ולהפעיל "עוצמה חדה" (\en{Sharp Power}) בקצבים החורגים מיכולת התגובה של בדיקת עובדות אנושית בדיעבד (\en{Reactive Fact-Checking}).
+
+דוח מכין זה מציג תכנון שלם למערכת \en{CivicShield AI}, המבוססת על פרדיגמה כפולה: \textbf{(1) חיסון תודעתי פרואקטיבי (\en{Cognitive Prebunking})} המעביר תגובה מהרשאה מאוחרת אל הקדמת התודעה טרם חשיפה לנרטיב כוזב; ו-\textbf{(2) תזמור רב-סוכני מתואם (\en{Multi-Agent Committee})} המפריד בין סוכני ניטור, סוכני מסגור תקשורתי, סוכני אימות פורנזי וסוכן בקרה חוקתי. במישור התיאורטי, המערכת ממפה תיאוריות קלאסיות בתקשורת ובמדעי המדינה — ובהן \en{Agenda Setting}, \en{Framing}, \en{Spiral of Silence}, המרחב הציבורי של \en{Habermas} ו"דמוקרטיה מתגוננת" — לכדי צינורות חישוב מוגדרים היטב. במישור הכמותי, הדוח גוזר ומריץ ארבעה מודלים מתמטיים מרכזיים ב-\en{Python}: מודל הדבקה תודעתית (\en{SIRI ODEs}), דינמיקת קיטוב תחומת-אמון (\en{Hegselmann-Krause}), איחוד פורנזי בייסיאני לזיהוי \en{Deepfake}, ומודל תורים \en{M/M/c} לחיזוי זמני תגובה ביום הבחירות. לבסוף, המסמך מעגן הגנות חוקתיות קשיחות, ובראשן מנגנון חתימה קריפטוגרפית משולש המבטיח כי בינה מלאכותית תוכל \emph{לזהות ולהמליץ}, אך לעולם לא לצנזר אזרחים באופן אוטונומי.
+
+% ==============================================================================
+% FRONT MATTER LISTS (TOC, LOF, LOT)
+% ==============================================================================
+\clearpage
+\tableofcontents
+
+\clearpage
+\listoffigures
+\vspace{0.8cm}
+\listoftables
+
+% ==============================================================================
+% CORE REPORT CHAPTERS (8 MODULAR CHAPTERS)
+% ==============================================================================
+\input{chapters/ch01_executive_rfp}
+\input{chapters/ch02_theory_comm_poli}
+\input{chapters/ch03_requirements_usecases}
+\input{chapters/ch04_architecture_agents}
+\input{chapters/ch05_math_models_simulations}
+\input{chapters/ch06_ethics_law_regulation}
+\input{chapters/ch07_risks_roadmap_budget}
+\input{chapters/ch08_multiagent_methodology}
+
+% ==============================================================================
+% ACADEMIC BIBLIOGRAPHY
+% ==============================================================================
+\clearpage
+\begin{thebibliography}{99}
+\addcontentsline{toc}{chapter}{ביבליוגרפיה ומקורות מדעיים והנדסיים}
+
+\bibitem{mccombs1972}
+\en{McCombs, M. E., \& Shaw, D. L. (1972). The Agenda-Setting Function of Mass Media. \textit{Public Opinion Quarterly}, 36(2), 176--187.}
+
+\bibitem{entman1993}
+\en{Entman, R. M. (1993). Framing: Toward Clarification of a Fractured Paradigm. \textit{Journal of Communication}, 43(4), 51--58.}
+
+\bibitem{noelle1974}
+\en{Noelle-Neumann, E. (1974). The Spiral of Silence: A Theory of Public Opinion. \textit{Journal of Communication}, 24(2), 43--51.}
+
+\bibitem{habermas1989}
+\en{Habermas, J. (1989). \textit{The Structural Transformation of the Public Sphere: An Inquiry into a Category of Bourgeois Society}. MIT Press.}
+
+\bibitem{mcguire1961}
+\en{McGuire, W. J. (1961). Resistance to Persuasion Conferred by Active and Passive Prior Refutation of the Same and Alternative Counterarguments. \textit{Journal of Abnormal and Social Psychology}, 63(2), 326--332.}
+
+\bibitem{roozenbeek2022}
+\en{Roozenbeek, J., van der Linden, S., Goldberg, B., Rathje, S., \& Lewandowsky, S. (2022). Psychological Inoculation Improves Resilience Against Misinformation on Social Media. \textit{Science Advances}, 8(34), eabo6254.}
+
+\bibitem{walker2018}
+\en{Walker, C. (2018). What Is "Sharp Power"? \textit{Journal of Democracy}, 29(3), 9--23.}
+
+\bibitem{nye2004}
+\en{Nye, J. S. (2004). \textit{Soft Power: The Means to Success in World Politics}. PublicAffairs.}
+
+\bibitem{iyengar2019}
+\en{Iyengar, S., Lelkes, Y., Levendusky, M., Malhotra, N., \& Westwood, S. J. (2019). The Origins and Consequences of Affective Polarization in the United States. \textit{Annual Review of Political Science}, 22, 129--146.}
+
+\bibitem{loewenstein1937}
+\en{Loewenstein, K. (1937). Militant Democracy and Fundamental Rights, I. \textit{American Political Science Review}, 31(3), 417--432.}
+
+\bibitem{vosoughi2018}
+\en{Vosoughi, S., Roy, D., \& Aral, S. (2018). The Spread of True and False News Online. \textit{Science}, 359(6380), 1146--1151.}
+
+\bibitem{lazer2018}
+\en{Lazer, D. M., Baum, M. A., Benkler, Y., Berinsky, A. J., Greenhill, K. M., Menczer, F., et al. (2018). The Science of Fake News. \textit{Science}, 359(6380), 1094--1096.}
+
+\bibitem{sunstein2017}
+\en{Sunstein, C. R. (2017). \textit{\#Republic: Divided Democracy in the Age of Social Media}. Princeton University Press.}
+
+\bibitem{hegselmann2002}
+\en{Hegselmann, R., \& Krause, U. (2002). Opinion Dynamics and Bounded Confidence: Models, Analysis and Simulation. \textit{Journal of Artificial Societies and Social Simulation (JASSS)}, 5(3), 1--33.}
+
+\bibitem{kermack1927}
+\en{Kermack, W. O., \& McKendrick, A. G. (1927). A Contribution to the Mathematical Theory of Epidemics. \textit{Proceedings of the Royal Society of London A}, 115(772), 700--721.}
+
+\bibitem{yao2022react}
+\en{Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., \& Cao, Y. (2023). ReAct: Synergizing Reasoning and Acting in Language Models. \textit{International Conference on Learning Representations (ICLR)}.}
+
+\bibitem{wu2023autogen}
+\en{Wu, Q., Bansal, G., Zhang, J., Wu, Y., Zhang, S., Zhu, E., et al. (2023). AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation. \textit{arXiv preprint arXiv:2308.08155}.}
+
+\bibitem{dwork2014}
+\en{Dwork, C., \& Roth, A. (2014). The Algorithmic Foundations of Differential Privacy. \textit{Foundations and Trends in Theoretical Computer Science}, 9(3--4), 211--407.}
+
+\bibitem{tolosana2020}
+\en{Tolosana, R., Vera-Rodriguez, R., Fierrez, J., Morales, A., \& Ortega-Garcia, J. (2020). DeepFakes and Beyond: A Survey of Face Manipulation and Fake Detection. \textit{Information Fusion}, 64, 131--148.}
+
+\bibitem{pacheco2021}
+\en{Pacheco, D., Hui, P. M., Torres-Lugo, C., Truong, B. T., Flammini, A., \& Menczer, F. (2021). Uncovering Coordinated Networks on Social Media: Methods and Case Studies. \textit{Proceedings of the International AAAI Conference on Web and Social Media (ICWSM)}, 15, 455--466.}
+
+\bibitem{segal2026l04}
+סגל, י. (2026). שיעור 4: \en{Multi-Agent Orchestration with AI Coding Agents (Masters, Subagents, Communication Hubs \& ReAct Loops)}. אוניברסיטת חיפה — קורס יישומי \en{AI} ו-\en{Vibe Coding}.
+
+\bibitem{barak1988}
+ברק, א. (1988). דמוקרטיה מתגוננת וחופש הביטוי במערכת הבחירות. בתוך \textit{עיוני משפט}, י"ג, אוניברסיטת תל אביב.
+
+\bibitem{eu_ai_act_2024}
+\en{European Parliament and Council (2024). Regulation (EU) 2024/1689 Laying Down Harmonised Rules on Artificial Intelligence (AI Act). \textit{Official Journal of the European Union}.}
+
+\bibitem{eu_dsa_2022}
+\en{European Parliament and Council (2022). Regulation (EU) 2022/2065 on a Single Market for Digital Services (Digital Services Act -- DSA). \textit{Official Journal of the European Union}.}
+
+\bibitem{nist_ai_rmf_2023}
+\en{National Institute of Standards and Technology (NIST) (2023). \textit{Artificial Intelligence Risk Management Framework (AI RMF 1.0)}. U.S. Department of Commerce.}
+
+\bibitem{kleinrock1975}
+\en{Kleinrock, L. (1975). \textit{Queueing Systems, Volume I: Theory}. John Wiley \& Sons.}
+
+\end{thebibliography}
+
+\end{document}

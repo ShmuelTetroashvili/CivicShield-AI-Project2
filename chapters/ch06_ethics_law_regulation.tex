@@ -1,0 +1,104 @@
+% ==============================================================================
+% Chapter 6: Constitutional Law, Defensive Democracy, Ethics & Privacy
+% ==============================================================================
+\chapter{משפט חוקתי, דמוקרטיה מתגוננת, אתיקה והגנת הפרטיות}
+\label{ch:ethics}
+
+\section{הדילמה החוקתית: בין הגנת הדמוקרטיה לשימור חופש הביטוי הפוליטי}
+הפעלת בינה מלאכותית ממשלתית במרחב השיח הציבורי מעמידה את המשטר הדמוקרטי בפני מתח חוקתי חריף. מן העבר האחד, עיקרון \textbf{הדמוקרטיה המתגוננת} \cite{loewenstein1937, barak1988} מחייב את המדינה להגן על טוהר הבחירות ועל עצמאות ההכרעה הדמוקרטית מפני התערבות זרה (\en{FIMI}), הטעיה סינתטית (\en{Deepfake}) והתחזות רשתית המונית. מן העבר השני, חופש הביטוי הפוליטי נהנה ממעמד של "זכות עילאית", וכל מעורבות אלגוריתמית של הרשות המבצעת עלולה להפוך למכשיר של פיקוח פוליטי או ליצור "אפקט מצנן" (\en{Chilling Effect}) המרתיע אזרחים מביקורת לגיטימית על השלטון.
+
+פרק זה מתרגם את הדין החוקתי הישראלי — לרבות מבחן "הודאות הקרובה" לפגיעה בביטחון ההליך הדמוקרטי ואיסור הסמכות השרירותית — לצד תקני רגולציה בינלאומיים מובילים (\en{EU AI Act 2024} \cite{eu_ai_act_2024}, \en{EU DSA} \cite{eu_dsa_2022} ו-\en{NIST AI RMF} \cite{nist_ai_rmf_2023}) למגבלות קוד וקריפטוגרפיה בלתי עקיפות בתוך מערכת \en{CivicShield AI}.
+
+\begin{riskbox}[עיקרון הברזל החוקתי: איסור אכיפה אוטונומית וצנזורה אלגוריתמית]
+\begin{enumerate}
+    \item \textbf{הפרדת רשויות בתוך הארכיטקטורה:} למערכת \en{CivicShield AI} אין סמכות למחוק פוסט, לחסום משתמש או להסיר ערוץ בכוחות עצמה. הבינה המלאכותית מוגבלת ל\emph{גילוי ממצאים}, \emph{מדידת דפוסים} ו\emph{הפקת המלצות לחיסון תודעתי (\en{Prebunking})}.
+    \item \textbf{חסינות דעות פוליטיות לגיטימיות:} המערכת מנועה מלתייג ביקורת אזרחית אותנטית, סאטירה פוליטית, מחאה חברתית או פרשנות אידאולוגית שנויה במחלוקת כאיום — גם כאשר השפה חריפה או מקוטבת.
+    \item \textbf{שלילת מידור ממשלתי:} החלטה להנפיק הודעת אזהרה רשמית או פניית הסרה לפלטפורמות בגין חשד לתעמולת בחירות אסורה או \en{FIMI} טעונה הסכמה קריפטוגרפית משולשת המשתפת גורם שיפוטי ואופוזיציוני.
+\end{enumerate}
+\end{riskbox}
+
+\section{עץ ההחלטות החוקתי בשכבה 4 (Constitutional Guardrail Engine)}
+כאשר סוכן החוקה (\en{Constitutional \& RedTeam Agent}) מקבל תיק ראיות מה-\en{Communication Hub}, ההחלטה אינה מתקבלת בשיח שפה חופשי העלול לשגות, אלא דרך עץ החלטות דטרמיניסטי (\en{Open Policy Agent / Rego}) המשלב כללים משפטיים קשיחים עם ממצאי הסוכנים. איור~\ref{fig:constitutional_tree} מציג את זרימת השיפוט והחסימה החוקתית.
+
+\begin{figure}[htbp]
+\begin{tikzhebrew}
+\begin{tikzpicture}[
+    node distance=0.85cm and 0.65cm,
+    qbox/.style={rectangle, rounded corners=4pt, draw=CivicNavy, fill=CivicNavyBg, line width=1.1pt, minimum width=4.8cm, minimum height=1.05cm, align=center, font=\footnotesize},
+    stopbox/.style={rectangle, rounded corners=4pt, draw=CivicEmerald, fill=CivicTealBg, line width=1.2pt, minimum width=3.8cm, minimum height=1.05cm, align=center, font=\scriptsize},
+    prebox/.style={rectangle, rounded corners=4pt, draw=CivicGold, fill=CivicGoldBg, line width=1.2pt, minimum width=4.3cm, minimum height=1.05cm, align=center, font=\scriptsize},
+    tribox/.style={rectangle, rounded corners=4pt, draw=CivicRed, fill=CivicRedBg, line width=1.3pt, minimum width=4.5cm, minimum height=1.15cm, align=center, font=\scriptsize},
+    arr/.style={-{Stealth[length=2.3mm]}, line width=1pt, color=CivicNavy}
+]
+    % Node 1: Entry check
+    \node[qbox] (Q1) at (0, 5.4) {\textbf{\he{שער 1: האם המידע נאסף מתקשורת פרטית?}}\\[1pt]{\tiny\en{Private DMs / Non-Public Personal Data Check}}};
+    \node[stopbox] (S1) at (5.3, 5.4) {\textbf{\he{דחייה מידית ומחיקה}}\\[1pt]{\tiny\he{חסימת \en{OSINT} קשיחה (\en{Hard Drop})}}};
+
+    % Node 2: Authenticity & CIB/Deepfake Check
+    \node[qbox] (Q2) at (0, 3.5) {\textbf{\he{שער 2: האם זו דעה אזרחית אותנטית ללא \en{CIB} או זיוף?}}\\[1pt]{\tiny\en{Protected Political Speech / Satire Exemption}}};
+    \node[stopbox] (S2) at (5.3, 3.5) {\textbf{\he{ביטוי פוליטי מוגן}}\\[1pt]{\tiny\he{אין תיוג ואין מעקב; סגירת תיק מיידית}}};
+
+    % Node 3: Quantitative Threshold & Bayes Gate
+    \node[qbox] (Q3) at (0, 1.5) {\textbf{\he{שער 3: האם מתקיים \en{$R_0 > 1.5$} ופורנזיקה \en{$P(F|\mathbf{e}) \ge 0.90$}?}}\\[1pt]{\tiny\en{SIRI Contagion Risk + Judicial Precision Gate}}};
+    \node[stopbox, fill=CivicGrayBg, draw=CivicSlate] (S3) at (5.3, 1.5) {\textbf{\he{ניטור מאקרו אנונימי בלבד}}\\[1pt]{\tiny\he{מעקב \en{$\epsilon$-DP} ללא פעולת התערבות}}};
+
+    % Node 4: Escalation Split (Prebunking vs Takedown Petition)
+    \node[qbox, draw=CivicGold, fill=CivicGoldBg] (Q4) at (0, -0.5) {\textbf{\he{שער 4: סוג ההתערבות המידתית הנדרשת}}\\[1pt]{\tiny\en{Proportionality \& Less-Restrictive-Means Test}}};
+
+    \node[prebox] (O1) at (-3.6, -2.5) {\textbf{\he{נתיב א': חיסון תודעתי אובייקטיבי}}\\[1pt]{\tiny\he{פרסום \en{Prebunking} על טכניקת ההונאה + שקיפות}}};
+    \node[tribox] (O2) at (3.6, -2.5) {\textbf{\he{נתיב ב': עתירת הסרה קריפטוגרפית}}\\[1pt]{\tiny\he{חתימה משולשת (שופט + סייבר + נציג ציבור)}}};
+
+    % Arrows
+    \draw[arr] (Q1) -- node[above, font=\scriptsize]{\he{כן}} (S1);
+    \draw[arr] (Q1) -- node[left, font=\scriptsize]{\he{לא (גלוי)}} (Q2);
+    \draw[arr] (Q2) -- node[above, font=\scriptsize]{\he{כן}} (S2);
+    \draw[arr] (Q2) -- node[left, font=\scriptsize]{\he{לא (\en{CIB / FIMI})}} (Q3);
+    \draw[arr] (Q3) -- node[above, font=\scriptsize]{\he{לא}} (S3);
+    \draw[arr] (Q3) -- node[left, font=\scriptsize]{\he{כן}} (Q4);
+    \draw[arr] (Q4.south) -| node[above left, font=\scriptsize]{\he{אמצעי מידתי ראשוני}} (O1.north);
+    \draw[arr, color=CivicRed] (Q4.south) -| node[above right, font=\scriptsize]{\he{זיוף בחירות פלילי / \en{FIMI} חמור}} (O2.north);
+\end{tikzpicture}
+\end{tikzhebrew}
+\caption{עץ ההחלטות החוקתי של CivicShield AI: הבחנה בין ביטוי מוגן, חיסון תודעתי ועתירת חתימה משולשת}
+\label{fig:constitutional_tree}
+\end{figure}
+
+\section{מנגנון החתימה הקריפטוגרפית המשולשת (Triple-Key Quorum)}
+מתן כוח התערבות ממשלתי בשעת בחירות חשוף תמיד לחשש מפני ניצולו לרעה בידי הקואליציה השלטת כנגד האופוזיציה או תנועות מחאה. כדי להפוך את הפרדת הסמכויות מסיסמה משפטית לחסם קריפטוגרפי בלתי ניתן לפריצה ברמת הארכיטקטורה, מממשת \en{CivicShield AI} מנגנון סף מבוזר מסוג \textbf{3 מתוך 3 (\en{3-of-3 Ed25519 Quorum})} עבור כל בקשה פורמלית לפלטפורמה חברתית לתיוג או הגבלה של קמפיין \en{Deepfake}/\en{FIMI} מובהק:
+\begin{enumerate}
+    \item \textbf{מפתח א' — רשות שיפוטית (יו"ר ועדת הבחירות המרכזית, שופט עליון):} מוודא קיום ראיות פליליות או הפרת חוק דרכי התעמולה בסטנדרט של ודאות קרובה ועמידה בעקרון המידתיות.
+    \item \textbf{מפתח ב' — סמכות טכנית (נציג מערך הסייבר הלאומי):} מאשר כי האינדיקטורים ההנדסיים (חתימות רשת \en{C2PA}, כתובות שרתים זרות, מתאמי בוטים) מאומתים ולא שגויים.
+    \item \textbf{מפתח ג' — איזון ציבורי-פרלמנטרי (נציג מבקר המדינה או נציגות אופוזיציונית מאושרת):} מעניק זכות וטו מוסדית אפקטיבית המונעת מהרשות המבצעת להפעיל צעדים חריגים בהיעדר הסכמה ממלכתית רחבה.
+\end{enumerate}
+ללא צירוף שלוש החתימות הדיגיטליות למסמך המקרה ביומן ה-\en{Merkle}, רכיב המשלוח בשכבה 5 נועל פיזית את קריאת ה-\en{API} הממשלתית. בכך, שרירי ה-\en{AI} מסייעים לשיקול דעת שיפוטי ושקוף — ואינם מחליפים אותו לעולם.
+
+\section{הגנת הפרטיות המתמטית: פרטיות דיפרנציאלית ($\epsilon$-DP) ומחיקה אוטומטית}
+בעיית יסוד באיסוף זרמי רשתות חברתיות היא סכנת יצירת "מאגר מעקב פוליטי" על עמדות אזרחים. כדי למנוע זאת, עוקבת המערכת אחר משנתם של דוורק ורות (\en{Dwork \& Roth, 2014}) \cite{dwork2014} ואוכפת \textbf{$\epsilon$-פרטיות דיפרנציאלית} בשכבה 1 עוד בטרם המידע נשמר בזיכרון האנליטי:
+
+מנגנון סטטיסטי $\mathcal{M}$ מקיים $\epsilon$-פרטיות דיפרנציאלית אם עבור כל שני מערכי נתונים שכנים $D, D'$ הנבדלים ברשומה של אזרח בודד אחד בלבד, ועבור כל קבוצת פלטים אפשרית $S \subseteq \text{Range}(\mathcal{M})$:
+\begin{equation}
+    \Pr[\mathcal{M}(D) \in S] \le e^{\epsilon} \cdot \Pr[\mathcal{M}(D') \in S],
+    \label{eq:epsilon_dp}
+\end{equation}
+כאשר תקציב הפרטיות המצטבר מוגבל בחוזים הטכניים של הדוח ל-$\epsilon \le 1.2$ (\en{NFR-04}). ביישום המערכת מוזרק רעש לפלס מכויל ($\text{Lap}(\Delta f / \epsilon)$) אל כל טבלאות המדדים המשוקללים של סדר היום והקיטוב בפורטל השקיפות. המשמעות היא כי חוקר או אזרח המעיין במפת החום של \en{CivicShield AI} אינו יכול להסיק, אף בהסתברות מתמטית גבוהה, האם אזרח מסוים כתב, שיתף או תמך במסגרת כזו או אחרת.
+
+יתר על כן, המידע הגולמי של הודעות פומביות נגרס ממטמון הזיכרון (\en{TTL Purge}) לאחר 30 יום באופן בלתי הפיך, פרט לרשומות חשבונות תקיפה מתואמים שנקשרו לתיק ראיות משפטי חתום.
+
+\section{מבדקי הגינות אלגוריתמית וסינתזה עם הרגולציה הבינלאומית}
+מערכות \en{NLP} וזיהוי שיח עלולות ללקות בהטיה א-סימטרית: סיווג שפה או דיאלקטים מסוימים כעוינים יותר מאחרים. כדי לעמוד בתקן \en{NFR-05} (פער שגיאה $< 1.5\%$ בין מחנות פוליטיים וקבוצות אוכלוסייה), מפעילה המערכת מדי שבועיים מבחני \textbf{הדמיה עיוורת דו-מפלגתית (\en{Dual-Wing Parity Testing})}. טבלה~\ref{tab:law_compliance} מסכמת את מיפוי דרישות המשפט והאתיקה לאמצעים ההנדסיים ב-\en{CivicShield AI}.
+
+{\renewcommand{\arraystretch}{1.35}
+\begin{table}[htbp]
+\centering
+\caption{עמידה בעקרונות החוק, הפרטיות והרגולציה הבינלאומית (EU AI Act, DSA, NIST)}
+\label{tab:law_compliance}
+\begin{tabularx}{\textwidth}{|p{3.0cm}|p{3.2cm}|X|}
+\hline
+\textbf{\textcolor{CivicNavy}{מסגרת רגולטורית / חוקתית}} & \textbf{\textcolor{CivicNavy}{דרישה מרכזית}} & \textbf{\textcolor{CivicNavy}{מימוש ארכיטקטוני ב-\en{CivicShield AI}}} \\ \hline
+הלכת "הודאות הקרובה" ודמוקרטיה מתגוננת \cite{barak1988} & איזון הדוק בין הגנת הבחירות לחופש הביטוי & שלילת הסרה אוטומטית; קידום \en{Prebunking} כהסברה חינוכית בלתי פוגענית. \\ \hline
+\en{EU AI Act (2024/1689)} \cite{eu_ai_act_2024} & מערכות בחירות הן \en{High-Risk AI}; חובת פיקוח אנושי ורישום & עמידה במנגנון \en{3-of-3 Quorum} וניהול תיקי החלטה בלתי נמחקים ביומן \en{Merkle}. \\ \hline
+\en{EU Digital Services Act (DSA)} \cite{eu_dsa_2022} & שקיפות אלגוריתמית, סיכון מערכתי וזכות ערעור & דשבורד פתוח לציבור, הנמקה מלאה (\en{XAI}) לכל התראה ופרוטוקול ערעור מהיר. \\ \hline
+\en{NIST AI RMF 1.0} \cite{nist_ai_rmf_2023} & ניהול הטיות, הסברתיות וחוסן מפני התקפות & בקרת שוויון (\en{Fairness Parity $<1.5\%$}), הגנת \en{Prompt Injection} וסוכן בקרה עוין. \\ \hline
+דיני הגנת הפרטיות ו-\en{$\epsilon$-DP} \cite{dwork2014} & מזעור נתונים ואיסור פרופילאז' על אזרחים & מחיקת מזהי \en{PII} בקליטה, הזרקת רעש \en{$\epsilon \le 1.2$}, ומחיקה כפויה כל 30 יום. \\ \hline
+\end{tabularx}
+\end{table}}
